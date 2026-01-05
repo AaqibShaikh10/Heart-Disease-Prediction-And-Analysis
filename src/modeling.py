@@ -15,11 +15,11 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 
 # Models
-from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
 
 # Metrics
 from sklearn.metrics import (
@@ -70,15 +70,11 @@ def get_models() -> Dict[str, Any]:
         Dict mapping model names to model instances
     """
     models = {
-        'DummyClassifier': DummyClassifier(strategy='most_frequent', random_state=RANDOM_SEED),
+        'NaiveBayes': GaussianNB(),
         'LogisticRegression': LogisticRegression(max_iter=500, random_state=RANDOM_SEED),
-        'LogisticRegression_Balanced': LogisticRegression(
-            max_iter=500, class_weight='balanced', random_state=RANDOM_SEED
-        ),
-        'RandomForest': RandomForestClassifier(n_estimators=100, random_state=RANDOM_SEED),
-        'SVC': SVC(probability=True, random_state=RANDOM_SEED),
-        'KNeighbors': KNeighborsClassifier(),
-        'GradientBoosting': GradientBoostingClassifier(random_state=RANDOM_SEED)
+        'DecisionTree': DecisionTreeClassifier(random_state=RANDOM_SEED),
+        'KNN': KNeighborsClassifier(),
+        'RandomForest': RandomForestClassifier(n_estimators=100, random_state=RANDOM_SEED)
     }
     return models
 
@@ -163,18 +159,20 @@ def get_tuning_grids() -> Dict[str, Dict[str, List]]:
             'classifier__max_depth': [None, 10, 20],
             'classifier__min_samples_split': [2, 5]
         },
-        'GradientBoosting': {
-            'classifier__n_estimators': [50, 100],
-            'classifier__learning_rate': [0.05, 0.1, 0.2],
-            'classifier__max_depth': [3, 5]
+        'DecisionTree': {
+            'classifier__max_depth': [None, 5, 10, 20],
+            'classifier__min_samples_split': [2, 5, 10],
+            'classifier__criterion': ['gini', 'entropy']
         },
         'LogisticRegression': {
-            'classifier__C': [0.01, 0.1, 1.0, 10.0],
-            'classifier__penalty': ['l2']
+            'classifier__C': [0.01, 0.1, 1.0, 10.0]
         },
-        'LogisticRegression_Balanced': {
-            'classifier__C': [0.01, 0.1, 1.0, 10.0],
-            'classifier__penalty': ['l2']
+        'KNN': {
+            'classifier__n_neighbors': [3, 5, 7, 9],
+            'classifier__weights': ['uniform', 'distance']
+        },
+        'NaiveBayes': {
+            'classifier__var_smoothing': [1e-9, 1e-8, 1e-7]
         }
     }
     return grids

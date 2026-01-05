@@ -17,15 +17,13 @@ This project implements a full-stack heart disease prediction system using data 
 - [Features](#-features)
 - [Project Structure](#-project-structure)
 - [Dataset](#-dataset)
-- [Algorithms & Methodology](#-algorithms--methodology)
+- [Algorithms Used](#-algorithms-used)
 - [Installation & Setup](#-installation--setup)
 - [Usage](#-usage)
 - [API Documentation](#-api-documentation)
 - [Model Performance](#-model-performance)
-- [Screenshots](#-screenshots)
 - [Technical Details](#-technical-details)
 - [Limitations](#-limitations)
-- [Future Improvements](#-future-improvements)
 - [Disclaimer](#-disclaimer)
 
 ---
@@ -35,9 +33,9 @@ This project implements a full-stack heart disease prediction system using data 
 Heart disease is one of the leading causes of death worldwide. Early detection and prediction can significantly improve patient outcomes. This project applies **data mining and machine learning techniques** to predict the presence of heart disease based on 11 clinical features.
 
 ### Key Objectives:
-1. **Exploratory Data Analysis (EDA)** - Understand patterns and relationships in the data
-2. **Data Preprocessing** - Handle missing values, duplicates, and data transformations
-3. **Model Comparison** - Evaluate multiple ML algorithms using cross-validation
+1. **Exploratory Data Analysis (EDA)** - Understand patterns in the data
+2. **Data Preprocessing** - Handle missing values and transformations
+3. **Model Comparison** - Evaluate 5 ML algorithms using cross-validation
 4. **Hyperparameter Tuning** - Optimize the best performing models
 5. **Model Evaluation** - Assess performance using various metrics
 6. **Deployment** - Create a web interface for predictions
@@ -48,7 +46,7 @@ Heart disease is one of the leading causes of death worldwide. Early detection a
 
 ### Machine Learning Pipeline
 - ✅ Automated data cleaning and preprocessing
-- ✅ Comparison of 7 different classifiers
+- ✅ Comparison of 5 classification algorithms
 - ✅ Cross-validation with stratified K-fold
 - ✅ Hyperparameter tuning with GridSearchCV
 - ✅ Threshold analysis for optimal classification
@@ -79,29 +77,21 @@ Heart disease is one of the leading causes of death worldwide. Early detection a
 ```
 Heart Disease Prediction and Analysis Project/
 │
-├── 📂 data/
+├── data/
 │   ├── raw/                     # Raw dataset (heart_disease.csv)
 │   └── processed/               # Processed data files
 │
-├── 📂 models/
+├── models/
 │   └── best_model.joblib        # Trained model (generated)
 │
-├── 📂 notebooks/
+├── notebooks/
 │   ├── 01_eda.py                # Exploratory Data Analysis
 │   └── 02_modeling.py           # Model training workflow
 │
-├── 📂 reports/
+├── reports/
 │   └── figures/                 # Generated visualization plots
-│       ├── confusion_matrix.png
-│       ├── roc_curve.png
-│       ├── permutation_importance.png
-│       ├── target_distribution.png
-│       ├── corr_heatmap.png
-│       ├── numeric_distributions.png
-│       ├── numeric_boxplots.png
-│       └── categorical_distributions.png
 │
-├── 📂 src/                      # Python source code
+├── src/                         # Python source code
 │   ├── __init__.py
 │   ├── config.py                # Configuration constants
 │   ├── data_utils.py            # Data loading & preprocessing
@@ -110,12 +100,12 @@ Heart Disease Prediction and Analysis Project/
 │   ├── evaluate.py              # Evaluation script
 │   └── predict.py               # CLI prediction script
 │
-├── 📂 api/                      # FastAPI backend
+├── api/                         # FastAPI backend
 │   ├── __init__.py
 │   ├── app.py                   # API endpoints
 │   └── schemas.py               # Pydantic models
 │
-├── 📂 web/                      # React frontend
+├── web/                         # React frontend
 │   ├── package.json
 │   ├── vite.config.ts
 │   ├── index.html
@@ -123,11 +113,6 @@ Heart Disease Prediction and Analysis Project/
 │       ├── main.tsx
 │       ├── App.tsx
 │       ├── styles.css
-│       ├── api/client.ts
-│       ├── components/
-│       │   ├── FieldNumber.tsx
-│       │   ├── FieldSelect.tsx
-│       │   └── ResultCard.tsx
 │       └── pages/
 │           ├── PredictPage.tsx
 │           ├── ReportsPage.tsx
@@ -154,64 +139,41 @@ The dataset is based on the **UCI Heart Disease dataset**, combining data from:
 |---|---------|------|-------------|
 | 1 | `age` | Numeric | Age in years |
 | 2 | `sex` | Categorical | 0 = Female, 1 = Male |
-| 3 | `chest pain type` | Categorical | 1 = Typical angina, 2 = Atypical angina, 3 = Non-anginal pain, 4 = Asymptomatic |
+| 3 | `chest pain type` | Categorical | 1-4 (Typical angina to Asymptomatic) |
 | 4 | `resting bp s` | Numeric | Resting blood pressure (mm Hg) |
 | 5 | `cholesterol` | Numeric | Serum cholesterol (mg/dl) |
 | 6 | `fasting blood sugar` | Categorical | 0 = ≤120 mg/dl, 1 = >120 mg/dl |
-| 7 | `resting ecg` | Categorical | 0 = Normal, 1 = ST-T abnormality, 2 = LV hypertrophy |
+| 7 | `resting ecg` | Categorical | 0-2 (Normal to LV hypertrophy) |
 | 8 | `max heart rate` | Numeric | Maximum heart rate achieved |
 | 9 | `exercise angina` | Categorical | 0 = No, 1 = Yes |
 | 10 | `oldpeak` | Numeric | ST depression induced by exercise |
-| 11 | `ST slope` | Categorical | 1 = Upsloping, 2 = Flat, 3 = Downsloping |
+| 11 | `ST slope` | Categorical | 1-3 (Upsloping to Downsloping) |
 
 ### Target Variable
 - `target`: 0 = No heart disease, 1 = Heart disease present
 
 ### Dataset Statistics
-- **Total samples**: 1190 (before deduplication)
-- **After cleaning**: ~918 samples
-- **Target distribution**: Approximately 55% positive, 45% negative
+- **Total samples**: 1190 (before cleaning)
+- **After cleaning**: 918 samples (duplicates removed)
+- **Target distribution**: 508 positive (55%), 410 negative (45%)
 
 ---
 
-## 🧠 Algorithms & Methodology
+## 🧠 Algorithms Used
 
-### Data Preprocessing Pipeline
+This project compares **5 classification algorithms** commonly taught in Data Mining courses:
 
-```
-Raw Data → Remove Duplicates → Handle Missing Values → Feature Engineering → Train/Test Split
-```
-
-1. **Duplicate Removal**: ~272 duplicate rows removed
-2. **Missing Value Treatment**:
-   - Zeros in `resting bp s` and `cholesterol` treated as missing (medically impossible)
-   - Numeric: Median imputation
-   - Categorical: Most frequent imputation
-3. **Feature Scaling**: StandardScaler for numeric features
-4. **Encoding**: OneHotEncoder for categorical features
-
-### Models Compared
-
-| Algorithm | Description |
-|-----------|-------------|
-| **Random Forest** | Ensemble of decision trees with bagging |
-| **Logistic Regression** | Linear classifier with sigmoid activation |
-| **Logistic Regression (Balanced)** | Class-weighted logistic regression |
-| **Gradient Boosting** | Sequential ensemble with boosting |
-| **Support Vector Classifier** | Kernel-based maximum margin classifier |
-| **K-Nearest Neighbors** | Distance-based lazy learner |
-| **Dummy Classifier** | Baseline (majority class prediction) |
-
-### Model Selection Process
-
-1. **Cross-Validation**: 5-fold stratified CV
-2. **Primary Metric**: ROC-AUC (handles class imbalance)
-3. **Secondary Metric**: F1-Score
-4. **Top 2 Selection**: Best models proceed to hyperparameter tuning
-5. **Grid Search**: Exhaustive search over parameter grid
+| # | Algorithm | Description | ROC-AUC |
+|---|-----------|-------------|---------|
+| 1 | **Naive Bayes** | Probabilistic classifier based on Bayes' theorem | 90.9% |
+| 2 | **Logistic Regression** | Linear model for binary classification | 92.2% |
+| 3 | **Decision Tree** | Tree-based rules for classification | 78.5% |
+| 4 | **K-Nearest Neighbors (KNN)** | Classifies based on nearest neighbors | 89.8% |
+| 5 | **Random Forest** | Ensemble of multiple decision trees | **92.5%** |
 
 ### Best Model: Random Forest Classifier
 
+After hyperparameter tuning:
 ```python
 RandomForestClassifier(
     n_estimators=100,
@@ -221,114 +183,75 @@ RandomForestClassifier(
 )
 ```
 
-### Why Random Forest?
-- ✅ Handles mixed feature types (numeric + categorical)
-- ✅ Resistant to overfitting through ensemble averaging
-- ✅ Provides feature importance for interpretability
-- ✅ No strict assumptions about data distribution
-- ✅ Works well with small-medium datasets
+### Data Preprocessing Pipeline
+
+1. **Duplicate Removal**: 272 duplicate rows removed
+2. **Missing Value Treatment**:
+   - Zeros in `resting bp s` and `cholesterol` treated as missing
+   - Numeric features: Median imputation + StandardScaler
+   - Categorical features: Most frequent imputation + OneHotEncoder
 
 ---
 
 ## 🚀 Installation & Setup
 
 ### Prerequisites
-- Python 3.10 or higher
-- Node.js 18 or higher (for frontend)
-- pip or uv (Python package manager)
+- Python 3.10+
+- Node.js 18+ (for frontend)
 
-### Step 1: Clone/Download the Project
+### Step 1: Set Up Python Environment
 
-```bash
-cd "Heart Disease Prediction and Analysis Project"
-```
-
-### Step 2: Set Up Python Environment
-
-**Option A: Using pip (standard)**
 ```bash
 # Create virtual environment
 python -m venv .venv
 
-# Activate virtual environment
-# Windows:
+# Activate (Windows)
 .venv\Scripts\activate
-# macOS/Linux:
+
+# Activate (macOS/Linux)
 source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-**Option B: Using uv (faster)**
-```bash
-# Install uv first
-pip install uv
+### Step 2: Add the Dataset
 
-# Install dependencies
-uv pip install -r requirements.txt
-```
+Place `heart_disease.csv` in `data/raw/` directory.
 
-**Option C: Using conda**
-```bash
-conda create -n heart-disease python=3.10 numpy pandas scikit-learn matplotlib seaborn joblib fastapi uvicorn pydantic -y
-conda activate heart-disease
-```
-
-### Step 3: Add the Dataset
-
-Place your `heart_disease.csv` file in the `data/raw/` directory:
-```
-data/raw/heart_disease.csv
-```
-
-### Step 4: Train the Model
+### Step 3: Train the Model
 
 ```bash
 python -m src.train --data data/raw/heart_disease.csv
 ```
 
-This will:
-- Load and clean the data
-- Compare 7 different models
-- Tune the top 2 models
-- Save the best model to `models/best_model.joblib`
-
-### Step 5: Generate Evaluation Reports
+### Step 4: Generate Evaluation Reports
 
 ```bash
 python -m src.evaluate --data data/raw/heart_disease.csv --model models/best_model.joblib
 ```
 
-This will:
-- Evaluate the model on the test set
-- Generate all visualization plots in `reports/figures/`
-- Print classification metrics
-
-### Step 6: Start the Backend API
+### Step 5: Start the Backend API
 
 ```bash
 uvicorn api.app:app --reload
 ```
+API available at: `http://localhost:8000`
 
-The API will be available at: `http://localhost:8000`
-- API docs: `http://localhost:8000/docs`
-
-### Step 7: Start the Frontend
+### Step 6: Start the Frontend
 
 ```bash
 cd web
 npm install
 npm run dev
 ```
-
-The frontend will be available at: `http://localhost:5173`
+Frontend available at: `http://localhost:5173`
 
 ---
 
 ## 💻 Usage
 
-### Command Line Interface
+### Command Line
 
 **Training:**
 ```bash
@@ -347,72 +270,44 @@ python -m src.predict --model models/best_model.joblib --json '{"age": 55, "sex"
 
 ### Web Interface
 
-1. Navigate to `http://localhost:5173`
-2. **Predict Page**: Enter patient data and get predictions
-3. **Reports Page**: View model metrics, visualizations, and dataset overview
-4. **About Page**: Learn about the project and data dictionary
+1. **Predict Page**: Enter patient data and get predictions
+2. **Reports Page**: View model metrics and visualizations
+3. **About Page**: Learn about the project
 
 ---
 
 ## 📡 API Documentation
 
-### Endpoints
-
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/` | API information |
 | GET | `/health` | Health check |
 | POST | `/predict` | Make a prediction |
 | GET | `/reports` | Get available figures |
-| GET | `/reports/figures/{filename}` | Get a specific figure |
-| GET | `/reports/dataset-preview` | Get dataset preview |
 | GET | `/reports/model-metrics` | Get classification report |
 
-### Example: Prediction Request
+### Prediction Example
 
 ```bash
 curl -X POST "http://localhost:8000/predict" \
   -H "Content-Type: application/json" \
-  -d '{
-    "age": 55,
-    "sex": 1,
-    "chest pain type": 4,
-    "resting bp s": 140,
-    "cholesterol": 250,
-    "fasting blood sugar": 0,
-    "resting ecg": 0,
-    "max heart rate": 150,
-    "exercise angina": 1,
-    "oldpeak": 1.5,
-    "ST slope": 2
-  }'
-```
-
-### Example: Prediction Response
-
-```json
-{
-  "prediction": 1,
-  "probability": 0.8234,
-  "threshold": 0.5
-}
+  -d '{"age": 55, "sex": 1, "chest pain type": 4, ...}'
 ```
 
 ---
 
 ## 📈 Model Performance
 
-### Cross-Validation Results (5-Fold Stratified)
+### Cross-Validation Results (5-Fold)
 
 | Model | ROC-AUC | F1-Score |
 |-------|---------|----------|
-| **Random Forest** | **0.9253** | **0.8633** |
-| Logistic Regression | 0.9223 | 0.8633 |
-| Gradient Boosting | 0.9187 | 0.8760 |
-| SVC | 0.9178 | 0.8716 |
-| KNeighbors | 0.8978 | 0.8594 |
+| **Random Forest** | **92.5%** | **86.3%** |
+| Logistic Regression | 92.2% | 86.3% |
+| Naive Bayes | 90.9% | 76.1% |
+| KNN | 89.8% | 85.9% |
+| Decision Tree | 78.5% | 80.7% |
 
-### Test Set Performance (After Tuning)
+### Test Set Performance (Random Forest)
 
 | Metric | Value |
 |--------|-------|
@@ -431,18 +326,14 @@ curl -X POST "http://localhost:8000/predict" \
 Heart Disease     0.88      0.93      0.90       102
 
     accuracy                          0.89       184
-   macro avg      0.89      0.89      0.89       184
-weighted avg      0.89      0.89      0.89       184
 ```
 
 ### Confusion Matrix
 
-```
-                Predicted
-              Normal  Disease
-Actual Normal    69      13
-       Disease    7      95
-```
+|  | Predicted Normal | Predicted Disease |
+|---|:---:|:---:|
+| **Actual Normal** | 69 | 13 |
+| **Actual Disease** | 7 | 95 |
 
 ---
 
@@ -450,7 +341,7 @@ Actual Normal    69      13
 
 ### Dependencies
 
-**Python Backend:**
+**Python:**
 - numpy, pandas - Data manipulation
 - scikit-learn - Machine learning
 - matplotlib, seaborn - Visualization
@@ -459,50 +350,24 @@ Actual Normal    69      13
 - pydantic - Data validation
 
 **Frontend:**
-- React 18 - UI framework
-- TypeScript - Type safety
-- Vite - Build tool
-- React Router - Navigation
-
-### Configuration
-
-Key settings in `src/config.py`:
-```python
-RANDOM_SEED = 42          # Reproducibility
-TEST_SIZE = 0.2           # 80% train, 20% test
-THRESHOLD = 0.50          # Classification threshold
-```
+- React 18, TypeScript, Vite
 
 ---
 
 ## ⚠️ Limitations
 
-1. **Dataset Size**: ~918 samples may not capture all population variations
-2. **Geographic Bias**: Data primarily from Western medical centers
-3. **Feature Limitations**: Only 11 features; other risk factors not included
-4. **Binary Classification**: Does not predict severity or type of heart disease
-5. **Static Model**: Does not update with new data automatically
-
----
-
-## 🔮 Future Improvements
-
-- [ ] Add more features (smoking, BMI, family history)
-- [ ] Implement deep learning models (Neural Networks)
-- [ ] Add SHAP values for explainability
-- [ ] Create Docker containerization
-- [ ] Deploy to cloud (AWS/GCP/Azure)
-- [ ] Add user authentication
-- [ ] Implement model retraining pipeline
-- [ ] Add more visualization types (UMAP, t-SNE)
+1. **Dataset Size**: ~918 samples may not capture all variations
+2. **Geographic Bias**: Data from Western medical centers
+3. **Feature Limitations**: Only 11 features included
+4. **Binary Classification**: Does not predict disease severity
 
 ---
 
 ## ⚕️ Disclaimer
 
-> **⚠️ IMPORTANT: This tool is for EDUCATIONAL PURPOSES ONLY**
+> **⚠️ This tool is for EDUCATIONAL PURPOSES ONLY**
 
-This prediction model is **NOT** intended to replace professional medical diagnosis. The predictions made by this system should **NOT** be used as a basis for medical decisions. Always consult a qualified healthcare professional for any health concerns or medical decisions.
+This prediction model is **NOT** intended to replace professional medical diagnosis. Always consult a qualified healthcare professional for medical decisions.
 
 This project was developed as part of a Data Warehousing and Data Mining course in Fall 2025 to demonstrate machine learning concepts and data mining techniques.
 
@@ -511,12 +376,3 @@ This project was developed as part of a Data Warehousing and Data Mining course 
 ## 📄 License
 
 This project is for educational purposes. The dataset is publicly available from the UCI Machine Learning Repository.
-
----
-
-## 🙏 Acknowledgments
-
-- UCI Machine Learning Repository for the Heart Disease dataset
-- scikit-learn team for the excellent ML library
-- FastAPI team for the modern Python web framework
-- React team for the frontend framework
