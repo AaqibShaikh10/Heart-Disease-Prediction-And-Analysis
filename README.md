@@ -234,7 +234,7 @@ python -m src.evaluate --data data/raw/heart_disease.csv --model models/best_mod
 ### Step 5: Start the Backend API
 
 ```bash
-uvicorn api.app:app --reload
+python run.py
 ```
 API available at: `http://localhost:8000`
 

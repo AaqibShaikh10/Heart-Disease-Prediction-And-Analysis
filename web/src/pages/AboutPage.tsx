@@ -12,9 +12,50 @@ function AboutPage() {
                 </p>
                 <p>
                     The backend uses a trained scikit-learn pipeline that applies preprocessing
-                    (imputation, scaling, one-hot encoding) and classification (e.g., Random Forest,
-                    Gradient Boosting, or Logistic Regression depending on training results).
+                    (imputation, scaling, one-hot encoding) and classification using the best
+                    performing algorithm from model comparison.
                 </p>
+            </section>
+
+            <section className="about-section">
+                <h3>🧠 Algorithms Used</h3>
+                <p>This project compares <strong>5 classification algorithms</strong>:</p>
+                <table className="data-dictionary">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Algorithm</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Naive Bayes</strong></td>
+                            <td>Probabilistic classifier based on Bayes' theorem with independence assumption</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Logistic Regression</strong></td>
+                            <td>Linear model for binary classification using sigmoid function</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Decision Tree (CART)</strong></td>
+                            <td>Tree-based classifier using Gini impurity or Information Gain</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>K-Nearest Neighbors (KNN)</strong></td>
+                            <td>Distance-based classifier that predicts based on nearest neighbors</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Random Forest</strong></td>
+                            <td>Ensemble of decision trees with bagging (Best performer: ~92% ROC-AUC)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section className="about-section">
